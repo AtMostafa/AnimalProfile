@@ -5,7 +5,8 @@ import json
 
 class Root:
     """
-    This class initializes root, and variables if found, otherwise lets the user to set up a new profile system.
+    This class initializes root, and variables if found,
+    otherwise lets the user to set up a new profile system.
     """
     SettingFile = 'RatTag.setup'
 
@@ -31,7 +32,6 @@ class Root:
             self.initialize()
         with open(self.settingPath, 'r') as f:
             self.setting = json.load(f)
-        
 
     def initialize(self):
         """
@@ -44,5 +44,5 @@ class Root:
 
 
 if __name__ == "__main__":
-    a=Root(root='/data')
+    a = Root(root='/data')
     print(a.setting)
