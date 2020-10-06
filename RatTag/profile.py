@@ -12,8 +12,8 @@ class Profile:
     def __init__(self, *, root):
         self._root = root.root
         self._prefix = root.prefix
-        self._headerFields = root.fix
-        self._tableFields = root.variable
+        self._headerFields = root.header
+        self._tableFields = root.body
 
         self._define_fields()
         self._allAnimals = self.get_all_animals()
@@ -22,7 +22,10 @@ class Profile:
         self.FREEZE = True
 
     def __setattr__(self, name, value):
-        if not self.FREEZE or name in self._headerFields or name in self._tableFields:
+        if not self.FREEZE:
+            super().__setattr__(name, value)
+        elif name in self._headerFields or name in self._tableFields:
+            assert isinstance(value, (str, list, tuple)), f"values must be string/list/tuple, not {type(value)}"
             super().__setattr__(name, value)
         else:
             logging.error(f'Field "{name}" does not exist in profiles')

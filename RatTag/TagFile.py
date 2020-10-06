@@ -62,7 +62,7 @@ class TagFile:
         in a tag file as a dictionary
         """
         if headerSize is None:
-            headerSize = len(self.root.fix)+2 # +2 for header and name fields
+            headerSize = len(self.root.header) + 2  # +2 for header and name fields
         try:
             table = pd.read_csv(self.path, 
                                 delim_whitespace=True,
