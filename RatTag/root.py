@@ -26,12 +26,16 @@ class Root:
 
         self._read_root()
 
+    def __str__(self):
+        return f'RatTag profile at: {self.root}'
+
     def _read_root(self):
         self.settingPath = self.root / self.SettingFile
         if not self.settingPath.is_file():
             self.initialize()
         with open(self.settingPath, 'r') as f:
-            self.setting = json.load(f)
+            setting = json.load(f)
+        self.__dict__.update(setting)
 
     def initialize(self):
         """
@@ -40,9 +44,9 @@ class Root:
         and write to the 'SettingFile'.
         This is tun once and at the beginning
         """
-        pass
+        raise NotImplementedError('To be added soon')
 
 
 if __name__ == "__main__":
     a = Root(root='/data')
-    print(a.setting)
+    print(a.prefix)
