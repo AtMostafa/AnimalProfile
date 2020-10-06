@@ -16,16 +16,15 @@ class Profile:
         self._tableFields = root.body
 
         self._define_fields()
-        self._allAnimals = self.get_all_animals()
 
-        #The last line of the INIT method
+        # The last line of the INIT method
         self.FREEZE = True
 
     def __setattr__(self, name, value):
         if not self.FREEZE:
             super().__setattr__(name, value)
         elif name in self._headerFields or name in self._tableFields:
-            assert isinstance(value, (str, list, tuple)), f"values must be string/list/tuple, not {type(value)}"
+            assert isinstance(value, (str, list, tuple, type(None))), f"values must be string/list/tuple, not {type(value)}"
             super().__setattr__(name, value)
         else:
             logging.error(f'Field "{name}" does not exist in profiles')
@@ -41,6 +40,12 @@ class Profile:
 
     def get_all_animals(self):
         return sorted(self._root.glob(f'{self._prefix}???/'))
+
+    def from_dict(self, profileDict: dict):
+        for key, val in profileDict.items():
+            if key in self.__dict__:
+                setattr(self, key, val)
+        return self
 
 if __name__ == "__main__":
     from root import Root
