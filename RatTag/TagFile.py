@@ -1,6 +1,7 @@
 import os
 import logging
 import pandas as pd
+from profile import Profile
 
 
 class TagFile:
@@ -30,7 +31,7 @@ class TagFile:
             logging.info(repr(e))
             return False
         return lines[-1].decode()
-    
+
     def _read_tag_header(self):
         out = dict()
         try:
@@ -43,7 +44,6 @@ class TagFile:
                         break
         except Exception:
             return False
-        
         return out
 
     def _is_tag_valid(self,):
@@ -64,12 +64,12 @@ class TagFile:
         if headerSize is None:
             headerSize = len(self.root.header) + 2  # +2 for header and name fields
         try:
-            table = pd.read_csv(self.path, 
+            table = pd.read_csv(self.path,
                                 delim_whitespace=True,
                                 skiprows=headerSize)
         except Exception as e:
             logging.warning(repr(e))
-            return {'Sessions':[],'Tag':'','Speed':'','Type':'','Event':'','Label':''}
-        table.replace(to_replace= {'Sessions': {'%': ''}},regex=True,inplace=True)
+            return Profile(root=self.root)
+        table.replace(to_replace={'Sessions': {'%': ''}}, regex=True, inplace=True)
         out = {label: list(column) for label, column in zip(table.columns.values, table.values.T)}
-        return out
+        return Profile(root=self.root).from_dict(out)
