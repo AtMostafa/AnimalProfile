@@ -27,7 +27,7 @@ class Root:
         self._read_root()
 
     def __str__(self):
-        return f'RatTag profile at: {self.root}'
+        return f'RatTag profile at: {self.settingPath}'
 
     def _read_root(self):
         self.settingPath = self.root / self.SettingFile
@@ -49,4 +49,4 @@ class Root:
 
 if __name__ == "__main__":
     a = Root(root='/data')
-    print(a.prefix)
+    print(a)
