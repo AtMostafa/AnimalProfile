@@ -37,6 +37,8 @@ class Root:
         with open(self.settingPath, 'r') as f:
             setting = json.load(f)
         self.__dict__.update(setting)
+        self.body.insert(0,'Sessions')
+        self.body.insert(1,'Tag')
 
     def initialize(self):
         """

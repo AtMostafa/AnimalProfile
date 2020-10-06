@@ -47,6 +47,7 @@ class Profile:
                 setattr(self, key, val)
         return self
 
+
 if __name__ == "__main__":
     from root import Root
     a = Profile(root=Root())

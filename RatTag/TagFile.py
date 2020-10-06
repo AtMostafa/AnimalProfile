@@ -9,10 +9,11 @@ class TagFile:
     This class represents a tag file and functions to deal with it
     """
 
-    def __init__(self, root, animal,):
+    def __init__(self, root, animal: str,):
         self.root = root
         self.animal = animal
-        self.path = self.root.root / animal / animal+'.profile'
+        self.path = self.root.root / animal / animal
+        self.path = self.path.with_suffix('.profile')
 
     def _read_last_line(self, maxLineLength=200):
         """
@@ -23,7 +24,7 @@ class TagFile:
             with open(self.path, 'rb') as f:
                 fileSize = os.fstat(f.fileno()).st_size
                 if maxLineLength > fileSize:
-                    maxLineLength = fileSize-1
+                    maxLineLength = fileSize - 1
                 f.seek(-abs(maxLineLength)-1, os.SEEK_END)
                 lines = f.readlines()
         except Exception as e:
@@ -39,7 +40,7 @@ class TagFile:
                 for line in f:
                     if line[0] == '#':
                         items = line.split(':')
-                        out[items[0][1:]]=items[1][:-1]
+                        out[items[0][1:]] = items[1][:-1]
                     else:
                         break
         except Exception:
@@ -73,3 +74,9 @@ class TagFile:
         table.replace(to_replace={'Sessions': {'%': ''}}, regex=True, inplace=True)
         out = {label: list(column) for label, column in zip(table.columns.values, table.values.T)}
         return Profile(root=self.root).from_dict(out)
+
+
+if __name__ == "__main__":
+    from root import Root
+    a = TagFile(root=Root(), animal='Rat111')
+    print(a)
