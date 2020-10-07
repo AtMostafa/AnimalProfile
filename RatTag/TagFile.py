@@ -67,7 +67,8 @@ class TagFile:
         try:
             table = pd.read_csv(self.path,
                                 delim_whitespace=True,
-                                skiprows=headerSize)
+                                skiprows=headerSize,
+                                dtype=str)
         except Exception as e:
             logging.warning(repr(e))
             return Profile(root=self.root)
