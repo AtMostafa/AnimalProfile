@@ -7,10 +7,11 @@ import RatTag.Profile as Profile
 
 
 root = Root()
-profile = Profile.Profile(root=root)
-profile.Speed = '15.0'
-profile.Event = 'SpeedChange'
+profile = root.get_profile()
+profile.Speed = '15'
+# profile.Event = 'SpeedChange'
+profile.rewardType = 'Progressive'
 tagfile = TagFile.TagFile(root, 'Rat111')
-s = session.get_session_list(tagfile, profile)
+s = session.batch_get_session_list(root, ['Rat111', 'Rat112'], profile)
 # s = tagfile.read_tag_table()
 print(s)
