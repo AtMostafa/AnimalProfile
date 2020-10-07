@@ -49,6 +49,6 @@ class Profile:
 
 
 if __name__ == "__main__":
-    from root import Root
+    from Root import Root
     a = Profile(root=Root())
     print(a)

@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 import json
-from profile import Profile
+from .Profile import Profile
 
 
 class Root:

@@ -1,7 +1,7 @@
 import os
 import logging
 import pandas as pd
-from profile import Profile
+from .Profile import Profile
 
 
 class TagFile:
@@ -77,6 +77,6 @@ class TagFile:
 
 
 if __name__ == "__main__":
-    from root import Root
+    from Root import Root
     a = TagFile(root=Root(), animal='Rat111')
     print(a)
