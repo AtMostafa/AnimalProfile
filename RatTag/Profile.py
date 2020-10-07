@@ -10,7 +10,7 @@ class Profile:
     FREEZE = False
 
     def __init__(self, *, root):
-        self._root = root.root
+        self._root = root
         self._prefix = root.prefix
         self._headerFields = root.header
         self._tableFields = root.body
@@ -48,7 +48,11 @@ class Profile:
             elif getattr(other, key) is [None]:
                 setattr(out, key, getattr(self, key))
             else:
-                setattr(out, key, getattr(self, key) + getattr(other, key))
+                setattr(out, key,
+                        list(
+                            set(
+                                getattr(self, key) + getattr(other, key)
+                            )))
         return out
 
     def _define_fields(self):
@@ -59,9 +63,6 @@ class Profile:
                 setattr(self, field, [])
         except SyntaxError:
             logging.critical('field names MUST be valid variable names in python.')
-
-    def get_all_animals(self):
-        return sorted(self._root.glob(f'{self._prefix}???/'))
 
     def from_dict(self, profileDict: dict):
         for key, val in profileDict.items():
