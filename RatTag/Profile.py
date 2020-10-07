@@ -19,6 +19,19 @@ class Profile:
 
         # The last line of the INIT method
         self.FREEZE = True
+    
+    def __str__(self):
+        str1 = '\n'.join([f'{field}={getattr(self,field)}' for field in self._headerFields])
+        str2 = '\n'.join([f'{field}={getattr(self,field)}' for field in self._tableFields])
+        return f'Header: {str1};\n\nBody: {str2}'
+    
+    def __repr__(self):
+        return self.__str__()
+
+    def keys(self):
+        keys=[key for key in self._headerFields]
+        keys.extend([key for key in self._tableFields])
+        return tuple(keys)
 
     def __setattr__(self, name, value):
         if not self.FREEZE:
