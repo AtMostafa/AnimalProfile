@@ -8,8 +8,8 @@ import RatTag.Profile as Profile
 
 root = Root()
 profile = Profile.Profile(root=root)
-# profile.Speed = '10.0'
-# profile.Event = 'SpeedChange'
+profile.Speed = '15.0'
+profile.Event = 'SpeedChange'
 tagfile = TagFile.TagFile(root, 'Rat111')
 s = session.get_session_list(tagfile, profile)
 # s = tagfile.read_tag_table()
