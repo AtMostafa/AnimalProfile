@@ -39,6 +39,18 @@ class Profile:
         else:
             logging.error(f'Field "{name}" does not exist in profiles')
 
+    def __add__(self, other):
+        assert isinstance(other, type(self)), f'only {type(self)}s can be added.'
+        out = Profile(root=self._root)
+        for key in self.keys():
+            if getattr(self, key) is [None]:
+                setattr(out, key, getattr(other, key))
+            elif getattr(other, key) is [None]:
+                setattr(out, key, getattr(self, key))
+            else:
+                setattr(out, key, getattr(self, key) + getattr(other, key))
+        return out
+
     def _define_fields(self):
         try:
             for field in self._headerFields:
