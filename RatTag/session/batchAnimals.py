@@ -16,7 +16,7 @@ def batch_get_session_list(root: Root.Root,
         profile = Profile.Profile(root=root)
 
     if animalList is None or animalList == '' or animalList == []:
-        animalPaths = sorted(root.glob(f'{profile._prefix}???/'))
+        animalPaths = sorted(root.root.glob(f'{profile._prefix}???/'))
         animalList = [animal.name for animal in animalPaths]
 
     profileOut = Profile.Profile(root=root)
