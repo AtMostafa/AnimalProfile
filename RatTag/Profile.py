@@ -28,11 +28,6 @@ class Profile:
     def __repr__(self):
         return self.__str__()
 
-    def keys(self):
-        keys=[key for key in self._headerFields]
-        keys.extend([key for key in self._tableFields])
-        return tuple(keys)
-
     def __setattr__(self, name, value):
         if not self.FREEZE:
             super().__setattr__(name, value)
@@ -59,6 +54,11 @@ class Profile:
             if key in self.__dict__:
                 setattr(self, key, val)
         return self
+
+    def keys(self):
+        keys = [key for key in self._headerFields]
+        keys.extend([key for key in self._tableFields])
+        return tuple(keys)
 
 
 if __name__ == "__main__":
