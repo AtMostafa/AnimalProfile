@@ -24,7 +24,7 @@ class Profile:
         str1 = '\n'.join([f'{field}={getattr(self,field)}' for field in self._headerFields])
         str2 = '\n'.join([f'{field}={getattr(self,field)}' for field in self._tableFields])
         return f'\nHeader: {str1};\n\nBody: {str2}'
-    
+
     def __repr__(self):
         return self.__str__()
 
@@ -33,10 +33,12 @@ class Profile:
             super().__setattr__(name, value)
         elif name in self._headerFields or name in self._tableFields:
             assert isinstance(value, (str, list, tuple, type(None))), f"values must be string/list/tuple, not {type(value)}"
-            super().__setattr__(name, value)
+            if isinstance(value, (str, type(None))):
+                value = [value]
+            super().__setattr__(name, list(value))
         else:
             logging.error(f'Field "{name}" does not exist in profiles')
-    
+
     def _define_fields(self):
         try:
             for field in self._headerFields:
