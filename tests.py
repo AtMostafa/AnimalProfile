@@ -15,3 +15,4 @@ tagfile = TagFile.TagFile(root, 'Rat111')
 s = session.batch_get_session_list(root, ['Rat111', 'Rat112'], profile)
 # s = tagfile.read_tag_table()
 print(s)
+
