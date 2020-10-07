@@ -42,9 +42,9 @@ class Profile:
     def _define_fields(self):
         try:
             for field in self._headerFields:
-                setattr(self, field, None)
+                setattr(self, field, [])
             for field in self._tableFields:
-                setattr(self, field, None)
+                setattr(self, field, [])
         except SyntaxError:
             logging.critical('field names MUST be valid variable names in python.')
 
