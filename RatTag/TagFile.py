@@ -33,7 +33,17 @@ class TagFile:
             return False
         return lines[-1].decode()
 
-    def _read_tag_header(self):
+    def _is_tag_valid(self,):
+        if not self.path.is_file():
+            return False    # tag not available
+        header = self._read_tag_header(self.path)
+        if isinstance(header, bool):
+            return False    # tag header not correct
+        if header['name'] != self.animal:
+            return False     # tag animal name not correct
+        return True
+    
+    def read_tag_header(self):
         out = dict()
         try:
             with open(self.path, 'r') as f:
@@ -44,18 +54,8 @@ class TagFile:
                     else:
                         break
         except Exception:
-            return False
+            return None
         return out
-
-    def _is_tag_valid(self,):
-        if not self.path.is_file():
-            return False    # tag not available
-        header = self._read_tag_header(self.path)
-        if isinstance(header, bool):
-            return False    # tag header not correct
-        if header['name'] != self.animal:
-            return False     # tag animal name not correct
-        return True
 
     def read_tag_table(self, headerSize=None):
         """
