@@ -81,18 +81,24 @@ class EventProfile:
     holds the results of the 'batch_get_event' function
     """
     def __init__(self, profile1: Profile, profile2: Profile):
-        assert self.is_single_animal(profile1) and self.is_single_animal(profile2),\
-            'Sessions of the inputs must be from a single animal.'
-        self.before = profile1
-        self.after = profile2
+        self.profile1 = profile1
+        self.profile2 = profile2
+        self.animalList = []
+        self.beforeSessions = []
+        self.afterSessions = []
 
-    def is_single_animal(self, profile: Profile):
-        prefixL = len(profile._prefix)
-        animals = [session[: prefixL + 3] for session in profile.Sessions]
-        if len(set(animals)) > 1:
-            return False
-        return True
+    def append(self, beforeSessionList: list, afterSessionList: list):
+        self._find_animal(beforeSessionList, afterSessionList)
+        self.beforeSessions.append(beforeSessionList)
+        self.afterSessions.append(afterSessionList)
 
+    def _find_animal(self, beforeSessionList: list, afterSessionList: list):
+        prefixL = len(self.profile1._prefix)
+        beforeAnimals = [session[: prefixL + 3] for session in beforeSessionList]
+        afterAnimals = [session[: prefixL + 3] for session in afterSessionList]
+        assert len(set(beforeAnimals + afterAnimals)) == 1,\
+            'before and after sessions do not belong to the same animal'
+        self.animalList.append(afterAnimals[0])
 
 if __name__ == "__main__":
     from Root import Root
