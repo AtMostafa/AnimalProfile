@@ -24,9 +24,8 @@ def get_session_profile(root: Root.Root, animal: str, session: str):
 
 def get_session_list(tagFile: TagFile.TagFile, profile: Profile.Profile = None):
     """
-    This function returns the list of the sessions within a tag file 
-    meeting all the conditions in 'profile', MOST keys in 'profile' could be a list of accepted conditions
-    Exception: keys corresponding to tag header
+    This function returns the list of the sessions within a profile file
+    meeting all the conditions in 'profile', 
     EX: profile={'Speed':['10','20'],'rewardType':'Progressive,'Tag':'Early-DLS_Lesion','Type':'Good'}
     """
     table = tagFile.read_tag_table()
