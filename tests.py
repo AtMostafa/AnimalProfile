@@ -9,8 +9,10 @@ import RatTag.Profile as Profile
 root = Root()
 profile1 = root.get_profile()
 profile1.Speed = '10'
+profile1.Type = 'Good'
 profile2 = root.get_profile()
 profile2.Speed = '15'
+profile2.Type = 'Good'
 # profile.Event = 'SpeedChange'
 # profile.rewardType = 'Progressive'
 # tagfile = TagFile.TagFile(root, 'Rat111')
