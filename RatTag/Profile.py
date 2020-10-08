@@ -49,10 +49,10 @@ class Profile:
                 setattr(out, key, getattr(self, key))
             else:
                 setattr(out, key,
-                        list(
+                        sorted(list(
                             set(
                                 getattr(self, key) + getattr(other, key)
-                            )))
+                            ))))
         return out
 
     def _define_fields(self):
