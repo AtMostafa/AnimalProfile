@@ -87,6 +87,12 @@ class EventProfile:
         self.beforeSessions = []
         self.afterSessions = []
 
+    def __str__(self):
+        s = ''
+        for i, animal in enumerate(self.animalList):
+            s += f"{animal}: {self.beforeSessions[i][-1]} -> {self.afterSessions[i][0]}\n"
+        return s
+
     def append(self, beforeSessionList: list, afterSessionList: list):
         self._find_animal(beforeSessionList, afterSessionList)
         self.beforeSessions.append(beforeSessionList)
