@@ -59,7 +59,7 @@ def batch_get_event(root: Root.Root,
     animalList0 = set(animalList1).intersection(set(animalList2))
     animalList0 = [animal for animal in animalList0 if animal not in badAnimals]  # remove bad animals from animalList0
     animalList0.sort()
-    
+
     eventProfile = Profile.EventProfile(profile1, profile2)
     for animal in animalList0:
         sessionProfile1 = batch_get_session_list(root, animalList=[animal], profile=profile1)
