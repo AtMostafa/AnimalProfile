@@ -57,19 +57,20 @@ def batch_get_event(root: Root.Root,
     animalList1 = batch_get_animal_list(root, profile1)
     animalList2 = batch_get_animal_list(root, profile2)
     animalList0 = set(animalList1).intersection(set(animalList2))
-    animalList0 = [animal for animal in animalList0 if animal not in badAnimals]  #remove bad animals from animalList0
-    sessionDic = {key: [[],[]] for key in animalList0}
+    animalList0 = [animal for animal in animalList0 if animal not in badAnimals]  # remove bad animals from animalList0
+    sessionDic = {key: [[], []] for key in animalList0}
     animalList = []
     for animal in animalList0:
-        sessionListProfile1 = batch_get_session_list(root, animalList=[animal], profile=profile1, until_date='')
-        sessionListProfile2 = batch_get_session_list(root, animalList=[animal], profile=profile2, until_date='')
-        sessionListTotal = batch_get_session_list(root, animalList=[animal], profile={'Type': 'Good'}, until_date='')
+        sessionProfile1 = batch_get_session_list(root, animalList=[animal], profile=profile1)
+        sessionProfile2 = batch_get_session_list(root, animalList=[animal], profile=profile2)
+        sessionTotal = batch_get_session_list(root, animalList=[animal], profile=root.get_profile())
         try:
-            index = sessionListTotal['Sessions'].index(sessionListProfile1['Sessions'][-1])
-            if sessionListProfile2['Sessions'][0] == sessionListTotal['Sessions'][index + 1]:
+            index = sessionTotal.Sessions.index(sessionProfile1.Sessions[-1])
+            if sessionProfile2.Sessions[0] == sessionTotal.Sessions[index + 1]:
+                # Two profiles succeed, meaning the Event happended.
                 animalList.append(animal)
-                sessionDic[animal][0] = sessionListProfile1['Sessions']
-                sessionDic[animal][1] = sessionListProfile2['Sessions']
-        except Exception as e:
-            logging.warning(repr(e))
+                sessionDic[animal][0] = sessionProfile1.Sessions
+                sessionDic[animal][1] = sessionProfile2.Sessions
+        except Exception:
+            pass
     return animalList, sessionDic
