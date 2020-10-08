@@ -1,7 +1,7 @@
-__all__ = ('batch_get_session_list', 'batch_get_animal_list')
+__all__ = ('batch_get_session_list', 'batch_get_animal_list', 'batch_get_event')
 from .. import Root
 from .. import TagFile
-from .. import Profile, EventProfile
+from .. import Profile
 from .singleAnimal import *
 
 
@@ -59,7 +59,7 @@ def batch_get_event(root: Root.Root,
     animalList0 = set(animalList1).intersection(set(animalList2))
     animalList0 = [animal for animal in animalList0 if animal not in badAnimals]  # remove bad animals from animalList0
 
-    eventProfile = EventProfile(profile1, profile2)
+    eventProfile = Profile.EventProfile(profile1, profile2)
     for animal in animalList0:
         sessionProfile1 = batch_get_session_list(root, animalList=[animal], profile=profile1)
         sessionProfile2 = batch_get_session_list(root, animalList=[animal], profile=profile2)
