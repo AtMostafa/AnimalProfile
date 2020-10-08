@@ -76,6 +76,24 @@ class Profile:
         return tuple(keys)
 
 
+class EventProfile:
+    """
+    holds the results of the 'batch_get_event' function
+    """
+    def __init__(self, profile1: Profile, profile2: Profile):
+        assert self.is_single_animal(profile1) and self.is_single_animal(profile2),\
+            'Sessions of the inputs must be from a single animal.'
+        self.before = profile1
+        self.after = profile2
+
+    def is_single_animal(self, profile: Profile):
+        prefixL = len(profile._prefix)
+        animals = [session[: prefixL + 3] for session in profile.Sessions]
+        if len(set(animals)) > 1:
+            return False
+        return True
+
+
 if __name__ == "__main__":
     from Root import Root
     a = Profile(root=Root())
