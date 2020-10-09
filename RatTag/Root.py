@@ -58,7 +58,7 @@ class Root:
     def get_all_animals(self):
         animalPaths = sorted(self.root.glob(f'{self.prefix}???/'))
         animalList = [animal.name for animal in animalPaths]
-        return animalList
+        return sorted(animalList)
 
 
 
