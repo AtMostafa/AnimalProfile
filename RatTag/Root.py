@@ -55,6 +55,12 @@ class Root:
         """
         return Profile(root=self)
 
+    def get_all_animals(self):
+        animalPaths = sorted(self.root.glob(f'{self.prefix}???/'))
+        animalList = [animal.name for animal in animalPaths]
+        return animalList
+
+
 
 if __name__ == "__main__":
     a = Root(root='/data')
