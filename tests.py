@@ -15,8 +15,9 @@ profile2.Speed = '15'
 profile2.Type = 'Good'
 # profile.Event = 'SpeedChange'
 # profile.rewardType = 'Progressive'
-# tagfile = TagFile.TagFile(root, 'Rat111')
-# s = session.batch_get_session_list(root, ['Rat111', 'Rat112'], profile)
-s = session.batch_get_event(root, profile1, profile2)
-# s = tagfile.read_tag_table()
+tagfile = TagFile.TagFile(root, 'Rat111')
+# s = session.batch_get_session_list(root, ['Rat111', 'Rat112'], profile1)
+# s = session.batch_get_event(root, profile1, profile2)
+s = tagfile.read_tag_table()
+s.keep_sessions([2, 3])
 print(s)

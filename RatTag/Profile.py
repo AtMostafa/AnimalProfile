@@ -19,7 +19,7 @@ class Profile:
 
         # The last line of the INIT method
         self.FREEZE = True
-    
+
     def __str__(self):
         str1 = '\n'.join([f'{field}={getattr(self,field)}' for field in self._headerFields])
         str2 = '\n'.join([f'{field}={getattr(self,field)}' for field in self._tableFields])
@@ -74,6 +74,20 @@ class Profile:
         keys = [key for key in self._headerFields]
         keys.extend([key for key in self._tableFields])
         return tuple(keys)
+
+    def keep_sessions(self, goodIndex: list):
+        """
+        This method removes every session other than those with their index in 'goodIndex'
+        """
+
+        # Make sure length of different body fields are equal
+        L = len(self.Sessions)
+        for key in self._tableFields:
+            assert L == len(getattr(self, key)),\
+                'Profile fields have different lengths.'
+        for key in self._tableFields:
+            setattr(self, key, [getattr(self, key)[val] for val in goodIndex])
+        return self
 
 
 class EventProfile:
