@@ -1,7 +1,7 @@
 __all__ = ('batch_get_session_list',
         'batch_get_animal_list',
         'batch_get_event',
-        'batch_get_pattern_list')
+        'batch_get_tag_pattern')
 
 from .. import Root
 from .. import TagFile
@@ -20,8 +20,7 @@ def batch_get_session_list(root: Root.Root,
         profile = Profile.Profile(root=root)
 
     if animalList is None or animalList == '' or animalList == []:
-        animalPaths = sorted(root.root.glob(f'{profile._prefix}???/'))
-        animalList = [animal.name for animal in animalPaths]
+        animalList = root.get_all_animals()
 
     profileOut = Profile.Profile(root=root)
     for animal in animalList:
@@ -78,25 +77,18 @@ def batch_get_event(root: Root.Root,
             pass
     return eventProfile
 
-def batch_get_pattern_list(root,animalList=None,tagPattern=''):
-    
-    clearScreen=False
-    if animalList is None or animalList=='' or animalList==[]:
-        animalPaths=glob.glob(os.path.join(root,'Rat*'))
-        animalList=[os.path.basename(animalPaths[i]) for i,_ in enumerate(animalPaths)]
-        clearScreen=True
-    animalList=sorted(animalList)
 
-    profileDict={}
+def batch_get_tag_pattern(root: Root.Root,
+                           animalList: list = None,
+                           tagPattern='*'):
+    """
+    applies 'get_pattern_session_list' to a list of animals
+    """
+    if animalList is None:
+        animalList = root.get_all_animals()
+
+    profileDict = root.get_profile()
     for animal in animalList:
-        tagPath=os.path.join(root,animal,animal+'.tag')
-        sessionProfile=get_pattern_session_list(tagFile=tagPath,tagPattern=tagPattern)
-        for key in sessionProfile:
-            if key not in profileDict:
-                profileDict[key]=[]
-            profileDict[key].extend(sessionProfile[key])
-    
-    if clearScreen:
-        clear_output()
-    
+        tagFile = TagFile.TagFile(root, animal)
+        profileDict += tagFile.get_pattern_session_list(tagPattern=tagPattern)
     return profileDict

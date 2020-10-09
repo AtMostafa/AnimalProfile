@@ -77,7 +77,7 @@ class TagFile:
         out = {label: list(column) for label, column in zip(table.columns.values, table.values.T)}
         return Profile(root=self.root).from_dict(out)
 
-    def get_pattern_session_list(self, tagPattern=''):
+    def get_pattern_session_list(self, tagPattern='*'):
         """
         This function returns the list of the sessions with the 'Tag'
         field conforming to the pattern in 'tagPattern'.
