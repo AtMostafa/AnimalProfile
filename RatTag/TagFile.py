@@ -1,6 +1,7 @@
 import os
 import logging
 import pandas as pd
+import fnmatch
 from .Profile import Profile
 
 
@@ -75,6 +76,20 @@ class TagFile:
         table.replace(to_replace={'Sessions': {'%': ''}}, regex=True, inplace=True)
         out = {label: list(column) for label, column in zip(table.columns.values, table.values.T)}
         return Profile(root=self.root).from_dict(out)
+
+    def get_pattern_session_list(self, tagPattern=''):
+        """
+        This function returns the list of the sessions with the 'Tag'
+        field conforming to the pattern in 'tagPattern'.
+        Usual shell-style Wildcards are accepted
+        (defined in the 'fnmatch' module of python standard library).
+        
+        """
+        table = self.read_tag_table()
+        goodSessions = fnmatch.filter(table.Tag, tagPattern)
+        goodIndex = [x for x, s in enumerate(table.Tag) if s in goodSessions]
+        table = table.keep_sessions(goodIndex)
+        return table
 
 
 if __name__ == "__main__":
