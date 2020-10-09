@@ -1,4 +1,8 @@
-__all__ = ('batch_get_session_list', 'batch_get_animal_list', 'batch_get_event')
+__all__ = ('batch_get_session_list',
+        'batch_get_animal_list',
+        'batch_get_event',
+        'batch_get_pattern_list')
+
 from .. import Root
 from .. import TagFile
 from .. import Profile
@@ -73,3 +77,26 @@ def batch_get_event(root: Root.Root,
         except Exception:
             pass
     return eventProfile
+
+def batch_get_pattern_list(root,animalList=None,tagPattern=''):
+    
+    clearScreen=False
+    if animalList is None or animalList=='' or animalList==[]:
+        animalPaths=glob.glob(os.path.join(root,'Rat*'))
+        animalList=[os.path.basename(animalPaths[i]) for i,_ in enumerate(animalPaths)]
+        clearScreen=True
+    animalList=sorted(animalList)
+
+    profileDict={}
+    for animal in animalList:
+        tagPath=os.path.join(root,animal,animal+'.tag')
+        sessionProfile=get_pattern_session_list(tagFile=tagPath,tagPattern=tagPattern)
+        for key in sessionProfile:
+            if key not in profileDict:
+                profileDict[key]=[]
+            profileDict[key].extend(sessionProfile[key])
+    
+    if clearScreen:
+        clear_output()
+    
+    return profileDict
