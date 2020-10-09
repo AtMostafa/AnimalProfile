@@ -79,8 +79,8 @@ def batch_get_event(root: Root.Root,
 
 
 def batch_get_tag_pattern(root: Root.Root,
-                           animalList: list = None,
-                           tagPattern='*'):
+                          animalList: list = None,
+                          tagPattern: str = '*'):
     """
     applies 'get_pattern_session_list' to a list of animals
     """
@@ -92,3 +92,17 @@ def batch_get_tag_pattern(root: Root.Root,
         tagFile = TagFile.TagFile(root, animal)
         profileDict += tagFile.get_pattern_session_list(tagPattern=tagPattern)
     return profileDict
+
+
+def get_pattern_animalList(root: Root.Root, tagPattern: str):
+    """
+    this function returns list of animals with at least one session matching the 'tagPattern'
+    """
+    allProfile = batch_get_tag_pattern(root, animalList=[], tagPattern=tagPattern)
+    sessionList = allProfile.Sessions
+
+    animalList = []
+    for session in sessionList:
+        animalList.append(session[:len(root.prefix) + 3])
+    animalList = list(set(animalList))
+    return sorted(animalList)
