@@ -50,17 +50,18 @@ class Root:
         """
         prefix = input("""What is the descriptive prefix of the data structure?\n
         E.g., Rat in Rat123, Rat124, etc.\n
-        Follow python variable naming rules in all the parameters: """)        
+        Follow python variable naming rules in all the parameters: """)
         prefix = prefix.split(maxsplit=2)[0]
 
-        print('Header: parameters defined once for each animal, e.g., name.')
+        print('Header: parameters defined once for each animal, e.g., name (added automatically).')
         Nheader = int(input('\nNumber of header parameters (int):'))
         header = []
         for i in range(Nheader):
             h = input(f'name of header param #{i+1}:')
             header.append(h.split(maxsplit=2)[0])
 
-        print('Body: parameters defined per session for each animal. "Session":session name and "Tag":experiment tag are added automatically.')
+        print("""Body: parameters defined per session for each animal.
+        "Session":session name, and "Tag":experiment tag are added automatically.""")
         Nbody = int(input('\nNumber of body parameters (int):'))
         body = []
         for i in range(Nbody):
@@ -82,7 +83,6 @@ class Root:
         animalPaths = sorted(self.root.glob(f'{self.prefix}???/'))
         animalList = [animal.name for animal in animalPaths]
         return sorted(animalList)
-
 
 
 if __name__ == "__main__":
