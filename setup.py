@@ -11,7 +11,7 @@ setuptools.setup(
     description="A package for tagging different animal experiments",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/atmostafa/RatTag",
+    url="https://github.com/atmostafa/AnimalProfile",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

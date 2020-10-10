@@ -1,9 +1,9 @@
 import os, sys
 from pathlib import Path
-from RatTag.Root import Root
-import RatTag.session as session
-import RatTag.TagFile as TagFile
-import RatTag.Profile as Profile
+from AnimalProfile.Root import Root
+import AnimalProfile.session as session
+import AnimalProfile.TagFile as TagFile
+import AnimalProfile.Profile as Profile
 
 
 root = Root()

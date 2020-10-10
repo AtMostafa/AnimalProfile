@@ -28,7 +28,7 @@ class Root:
         self._read_root()
 
     def __str__(self):
-        return f'RatTag profile at: {self.settingPath}'
+        return f'AnimalProfile profile at: {self.settingPath}'
 
     def _read_root(self):
         self.settingPath = self.root / self.SETTING_FILE
