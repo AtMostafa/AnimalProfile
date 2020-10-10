@@ -50,7 +50,7 @@ class Root:
         """
         prefix = input("""What is the descriptive prefix of the data structure?\n
         E.g., Rat in Rat123, Rat124, etc.\n
-        Follow python variable naming rules in all the parameters""")        
+        Follow python variable naming rules in all the parameters: """)        
         prefix = prefix.split(maxsplit=2)[0]
 
         print('Header: parameters defined once for each animal, e.g., name.')
@@ -69,7 +69,7 @@ class Root:
 
         out = {'prefix': prefix, 'header': header, 'body': body}
         with open(self.settingPath, 'w') as f:
-            json.dump(a, f, indent=4, sort_keys=True)
+            json.dump(out, f, indent=4, sort_keys=True)
         logging.info(f'Written: {self.settingPath}')
 
     def get_profile(self):

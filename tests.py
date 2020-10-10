@@ -20,6 +20,5 @@ profile2.Type = 'Good'
 # s = session.batch_get_tag_pattern(root,)
 # s = tagfile.read_tag_table()
 # s.keep_sessions([2, 3])
-s = session.get_pattern_animalList(root, '*DLS*')
+s = session.get_pattern_animalList(root, '*DMS*')
 print(s)
-
