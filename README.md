@@ -5,7 +5,7 @@ A python package for tagging animal experiments.
 This package creates and manages `profile` files for each animal, to keep track of experiments and assisst in grouping similar conditions together.
 Here is an example:
 
-![A screenshot of an example profile](profile_example.png)
+![A screenshot of an example profile](Docs/profile_example.png)
 
 A similar file for each animal consists of:
 - __header__ parameters, which are labels for each animal.
