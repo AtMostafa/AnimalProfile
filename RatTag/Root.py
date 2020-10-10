@@ -9,7 +9,7 @@ class Root:
     This class initializes root, and variables if found,
     otherwise lets the user to set up a new profile system.
     """
-    SETTING_FILE = 'RatTag.setup'
+    SETTING_FILE = 'AnimalProfile.setup'
 
     def __init__(self, *, root: str = None,):
         self.root = root
