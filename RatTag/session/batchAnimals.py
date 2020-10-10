@@ -1,7 +1,8 @@
 __all__ = ('batch_get_session_list',
         'batch_get_animal_list',
         'batch_get_event',
-        'batch_get_tag_pattern')
+        'batch_get_tag_pattern',
+        'get_pattern_animalList')
 
 from .. import Root
 from .. import TagFile

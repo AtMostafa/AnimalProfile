@@ -83,7 +83,6 @@ class TagFile:
         field conforming to the pattern in 'tagPattern'.
         Usual shell-style Wildcards are accepted
         (defined in the 'fnmatch' module of python standard library).
-        
         """
         table = self.read_tag_table()
         goodSessions = fnmatch.filter(table.Tag, tagPattern)
