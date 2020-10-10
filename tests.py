@@ -22,3 +22,4 @@ profile2.Type = 'Good'
 # s.keep_sessions([2, 3])
 s = session.get_pattern_animalList(root, '*DLS*')
 print(s)
+
