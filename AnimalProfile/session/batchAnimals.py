@@ -85,7 +85,7 @@ def batch_get_tag_pattern(root: Root.Root,
     """
     applies 'get_pattern_session_list' to a list of animals
     """
-    if animalList is None:
+    if animalList is None or animalList == []:
         animalList = root.get_all_animals()
 
     profileDict = root.get_profile()
@@ -99,7 +99,7 @@ def get_pattern_animalList(root: Root.Root, tagPattern: str):
     """
     this function returns list of animals with at least one session matching the 'tagPattern'
     """
-    allProfile = batch_get_tag_pattern(root, animalList=[], tagPattern=tagPattern)
+    allProfile = batch_get_tag_pattern(root, animalList=None, tagPattern=tagPattern)
     sessionList = allProfile.Sessions
 
     animalList = []
