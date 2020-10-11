@@ -8,8 +8,8 @@ import AnimalProfile.Profile as Profile
 
 root = Root()
 profile1 = root.get_profile()
-profile1.Speed = '10'
-profile1.Type = 'Good'
+# profile1.Speed = '10'
+# profile1.Type = 'Good'
 profile2 = root.get_profile()
 profile2.Speed = '15'
 profile2.Type = 'Good'
@@ -20,5 +20,5 @@ tagfile = TagFile.TagFile(root, 'Rat111')
 # s = session.batch_get_tag_pattern(root,)
 # s = tagfile.read_tag_table()
 # s.keep_sessions([2, 3])
-s = tagfile.write_animal_tag_file()
+s = tagfile.write_profile_file()
 print(s)

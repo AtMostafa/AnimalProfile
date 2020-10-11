@@ -37,7 +37,7 @@ class TagFile:
     def _is_tag_valid(self,):
         if not self.path.is_file():
             return False    # tag not available
-        header = self._read_tag_header(self.path)
+        header = self.read_tag_header()
         if isinstance(header, bool):
             return False    # tag header not correct
         if header['name'] != self.animal:
@@ -105,8 +105,9 @@ class TagFile:
         content = f"""#info:\n#name:{self.animal}"""
 
         for key in self.root.header:
-            val = getattr(profile, key)
+            val = getattr(profile, key)[0]
             content += f'\n#{key}:{val}'
+        content += '\n'
 
         for key in self.root.body:
             content += f'{key}\t'
@@ -121,7 +122,7 @@ class TagFile:
         return True
 
     def _update_tag_header(self, overwrite):
-        if not self.is_tag_valid() or overwrite:
+        if not self._is_tag_valid() or overwrite:
             # Ask user for header fields
             profile = self.root.get_profile()
             for header in profile._headerFields:
@@ -135,16 +136,12 @@ class TagFile:
         return True
 
     def _write_session_info(self, profile: Profile):
-        fixedText = ''
-        for key in profile._tableFields:
-            if key == 'Sessions':
-                continue
-            fixedText += f'{getattr(profile, key)}\t'
-        fixedText = fixedText[:-1]  # remove trailing \t
+        fixedText = '\t'.join([f'{getattr(profile, key)[0]}'
+                               for key in profile._tableFields if key != 'Sessions'])
         try:
             with open(self.path, 'a') as f:
                 for session in profile.Sessions:
-                    f.write('%' + session + '\t' + fixedText + '\n')
+                    f.write(f'%{session}\t{fixedText}\n')
         except Exception:
             return False
         return True
@@ -164,12 +161,12 @@ class TagFile:
             return False
 
         # check or write the tag header
-        isHeaderReady = self._update_tag_header(sessionList, overwrite)
+        isHeaderReady = self._update_tag_header(overwrite)
         if isHeaderReady is False:
             return False
 
         # Getting the last written session
-        lastLine = self._read_last_line(maxLineLength=200)
+        lastLine = self._read_last_line(maxLineLength=200).strip('\n')
         sessionName = lastLine.find('%')
         profileLastSession = self.root.get_profile()
         if sessionName >= 0:
@@ -187,16 +184,16 @@ class TagFile:
                 return False
         else:
             for key in profileLastSession._tableFields:
-                setattr(profileLastSession, key, '{key}_Temp')
+                setattr(profileLastSession, key, f'{key}_Temp')
 
         profileLastSession.Sessions = sessionList
 
         # writing the data to the tag file
         isFileWritten = self._write_session_info(profileLastSession)
         if isFileWritten is False:
-            logging.error("couldn not write")
+            logging.error("could not write")
             return False
-        logging.info("tag file is written for: " + self.animal)
+        logging.info("profile file is written for: " + self.animal)
         return True
 
 
