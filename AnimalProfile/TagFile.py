@@ -97,120 +97,106 @@ class TagFile:
         <prefix><XXX>_YYYY_MM_DD_HH_MM
         """
         expPath = self.path.parent / 'Experiments'
-        sessionList = [path.name for path in expPath.glob(f'{self.animal}_????_??_??_??_??')]
+        sessionList = [path.name for path in expPath.glob(f'{self.animal}_20??_??_??_??_??')]
         sessionList = sorted(sessionList)
+        return sessionList
 
-    def write_animal_tag_file(self, overwrite=False):
+    def _write_tag_header(self, profile: Profile):
+        content = f"""#info:\n#name:{self.animal}"""
+
+        for key in self.root.header:
+            val = getattr(profile, key)
+            content += f'\n#{key}:{val}'
+
+        for key in self.root.body:
+            content += f'{key}\t'
+        content = content[:-1]  # remove the trailing \t
+        content += '\n'
+
+        try:
+            with open(self.path, 'w') as f:
+                f.write(content)
+        except Exception:
+            return False
+        return True
+
+    def _update_tag_header(self, overwrite):
+        if not self.is_tag_valid() or overwrite:
+            # Ask user for header fields
+            profile = self.root.get_profile()
+            for header in profile._headerFields:
+                h = input(f'{header}: ')
+                setattr(profile, header, h)
+
+            isHeaderWritten = self._write_tag_header(profile)
+            if not isHeaderWritten:
+                logging.error('failed to write the tag header')
+                return False
+        return True
+
+    def _write_session_info(self, profile: Profile):
+        fixedText = ''
+        for key in profile._tableFields:
+            if key == 'Sessions':
+                continue
+            fixedText += f'{getattr(profile, key)}\t'
+        fixedText = fixedText[:-1]  # remove trailing \t
+        try:
+            with open(self.path, 'a') as f:
+                for session in profile.Sessions:
+                    f.write('%' + session + '\t' + fixedText + '\n')
+        except Exception:
+            return False
+        return True
+
+    def write_profile_file(self, overwrite=False):
         """
         This method writes (overwrites) the profile for the animal
         by reading the sessions in the 'Experiments' folder and
         adding them to the profile.
         """
-        tagFile = self.path
-        
-        #compute the valid session list
+
+        # compute the valid session list
         sessionList = self.get_sesisonList()
 
-        if len(sessionList)<1:
-            logging.warning("no session included:"+animal)
-            return False
-        withBehav=has_behavior(root,animal,sessionList)
-        sessionList=[goodSession for idx,goodSession in enumerate(sessionList) if withBehav[idx] is True]
-        if len(sessionList)<1:
-            logging.warning("no session included:"+animal)
+        if len(sessionList) < 1:
+            logging.error("no session found for:" + self.animal)
             return False
 
-        #check or write the tag header
-        isHeaderReady=update_tag_header(root,animal,sessionList,overwrite)
+        # check or write the tag header
+        isHeaderReady = self._update_tag_header(sessionList, overwrite)
         if isHeaderReady is False:
             return False
 
-        #Getting the last written session
-        lastLine=read_last_line(tagFile,maxLineLength=200)
-        sessionName=lastLine.find('%')
-        lastWrittenTag=''
-        lastWrittenSpeed=''
-        if sessionName>=0:
-            lastWrittenSession=lastLine[sessionName+1:].split('\t')[0]
-            lastWrittenTag    =lastLine[sessionName+1:].split('\t')[1]
-            lastWrittenSpeed  =lastLine[sessionName+1:].split('\t')[2]
-            idx=sessionList.index(lastWrittenSession)
-            if idx+1<len(sessionList):
-                sessionList=sessionList[idx+1:]
-            elif idx+1==len(sessionList):
+        # Getting the last written session
+        lastLine = self._read_last_line(maxLineLength=200)
+        sessionName = lastLine.find('%')
+        profileLastSession = self.root.get_profile()
+        if sessionName >= 0:
+            for i, key in enumerate(profileLastSession._tableFields):
+                setattr(profileLastSession, key, lastLine[sessionName + 1:].split('\t')[i])
+
+            idx = sessionList.index(profileLastSession.Sessions[-1])
+            if idx + 1 < len(sessionList):
+                sessionList = sessionList[idx + 1:]
+            elif idx + 1 == len(sessionList):
                 logging.info('No need to update the tag file')
                 return False
             else:
                 logging.warning("session list inconsistent!")
                 return False
-        
-        
-        #data structure:sessions*[tag|speed|type|event]
-        data=[]
-        #filling the data matrix
-        
-        for ID,session in enumerate(sessionList):
-            sessionInfo=[]
-            
-            #===============TAG FILE COLUMNS===========================================
-            
-            #"Session" name
-            sessionInfo.append(session)
-            
-            #"Tag" value
-            if sessionName>=0:
-                tag=lastWrittenTag
-            elif ID==0:
-                try:
-                    with open(os.path.join(root,animal,'Tag')) as f:
-                        tag=f.readline()
-                except:
-                    tag=input("type the tag for "+animal+" and press ENTER:")
-            else:
-                tag=data[-1][1]
-            sessionInfo.append(tag)
-            #----------------------------------------------
-            #"Speed" value (MUST be integer or a string):
-            spdValues=read_in_file(os.path.join(root,animal,'Experiments',session,session),"computed treadmill speed",valueType=float)
-            spdMODE=scipy.stats.mode(spdValues,nan_policy='omit')
-            spd=spdMODE.mode[0]
-            spdCOUNT=spdMODE.count[0]
-            if spdCOUNT<len(spdValues)/2:
-                sessionInfo.append('var')
-            else:
-                sessionInfo.append(str(int(spd)))
-            #----------------------------------------------
-            #"Type" value:
-            sessionInfo.append('Good')
-            #----------------------------------------------
-            #"Event" value:
-            event='-'
-            if ID>0:
-                if sessionInfo[2] != data[-1][2]:
-                    event="SpeedChange"
-            elif sessionName>=0 and lastWrittenTag != sessionInfo[1]:
-                event='TagChange'
-            elif sessionName>=0 and lastWrittenSpeed != sessionInfo[2]:
-                event="SpeedChange"
-            sessionInfo.append(event)
-            #----------------------------------------------
-            #"Label" value: (for later manual manipulation)
-            sessionInfo.append('NA')
-            #----------------------------------------------
-            #Add other columns to the tag file below:
-            #...
-            #...
-            #...
-            #sessionInfo.append(newColumn)
-            #=================TAG FILE END================================================
-            data.append(sessionInfo)
-        
-        #writing the data to the tag file
-        isFileWritten=write_session_info(tagFile,data)
+        else:
+            for key in profileLastSession._tableFields:
+                setattr(profileLastSession, key, '{key}_Temp')
+
+        profileLastSession.Sessions = sessionList
+
+        # writing the data to the tag file
+        isFileWritten = self._write_session_info(profileLastSession)
         if isFileWritten is False:
-            logging.info("couldn not write")
+            logging.error("couldn not write")
             return False
-        logging.info("tag file is written for: "+animal)
+        logging.info("tag file is written for: " + self.animal)
         return True
 
 
