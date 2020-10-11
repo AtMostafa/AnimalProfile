@@ -90,23 +90,27 @@ class TagFile:
         table = table.keep_sessions(goodIndex)
         return table
 
-    def write_animal_tag_file(root,animal,until_date='',overwrite=False):
-        
-        tagFile=os.path.join(root,animal,animal+'.tag')
+    def get_sesisonList(self):
+        """
+        returns the list of folders inside Experiments folder,
+        They must follow the pattern:
+        <prefix><XXX>_YYYY_MM_DD_HH_MM
+        """
+        expPath = self.path.parent / 'Experiments'
+        sessionList = [path.name for path in expPath.glob(f'{self.animal}_????_??_??_??_??')]
+        sessionList = sorted(sessionList)
+
+    def write_animal_tag_file(self, overwrite=False):
+        """
+        This method writes (overwrites) the profile for the animal
+        by reading the sessions in the 'Experiments' folder and
+        adding them to the profile.
+        """
+        tagFile = self.path
         
         #compute the valid session list
-        sessionList=[os.path.basename(expPath) for expPath in 
-                    glob.glob(os.path.join(root,animal,"Experiments",animal+'*'))]
-        sessionList=sorted(sessionList)
-        try:
-            untilDate=datetime.datetime.strptime(until_date,"%Y_%m_%d")
-            for idx,session in enumerate(sessionList):
-                sessionDate=datetime.datetime.strptime(session,animal+"_%Y_%m_%d_%H_%M")
-                if sessionDate > untilDate:
-                    sessionList=sessionList[:idx]
-                    break
-        except:
-            pass
+        sessionList = self.get_sesisonList()
+
         if len(sessionList)<1:
             logging.warning("no session included:"+animal)
             return False
