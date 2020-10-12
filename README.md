@@ -23,6 +23,8 @@ The package:
 
 # Data structure
 
+The data must be structured in a [particular format](/Docs/dataStructure.md).
+
 # Basic usage
 
 # Installation
