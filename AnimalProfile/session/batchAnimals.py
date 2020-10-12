@@ -1,8 +1,9 @@
 __all__ = ('batch_get_session_list',
-        'batch_get_animal_list',
-        'batch_get_event',
-        'batch_get_tag_pattern',
-        'get_pattern_animalList')
+           'batch_get_animal_list',
+           'batch_get_event',
+           'batch_get_tag_pattern',
+           'get_pattern_animalList',
+           'get_current_animals')
 
 import datetime
 import logging
@@ -112,7 +113,7 @@ def get_pattern_animalList(root: Root.Root, tagPattern: str):
 
 
 def get_current_animals(root: Root.Root, days_passed=4):
-    now = datetime.date.today()
+    now = datetime.datetime.now()
     all_animals = root.get_all_animals()
     if all_animals == []:
         logging.warning('No animal found!')
