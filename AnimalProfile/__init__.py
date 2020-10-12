@@ -4,4 +4,4 @@ from .Profile import Profile
 from .Root import Root
 
 
-logging.getLogger().setLevel(logging.WARNING)
+logging.getLogger().setLevel(logging.INFO)
