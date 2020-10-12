@@ -6,7 +6,7 @@ import datetime
 from .Profile import Profile
 
 
-class TagFile:
+class File:
     """
     This class represents a tag file and functions to deal with it
     """
@@ -205,5 +205,5 @@ class TagFile:
 
 if __name__ == "__main__":
     from Root import Root
-    a = TagFile(root=Root(), animal='Rat111')
+    a = File(root=Root(), animal='Rat111')
     print(a)
