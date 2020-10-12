@@ -2,8 +2,8 @@
 
 A python package for tagging animal experiments.
 
-This package creates and manages _profile_ files for each animal, to keep track of experiments and allow grouping similar conditions together.
-Here is an example of a _profile_ file:
+This package allows assigning tags and parameters to animals and experiments, to keep track of them and group similar conditions together.
+Here is an example of a _profile_ file for an animal:
 
 ![A screenshot of an example profile](doc/profile_example.png)
 
@@ -18,7 +18,7 @@ The `_Sessions_ columns lists all the experiments, the _Tag_ column should inclu
 User can add more columns to the body (3 more columns in this example).
 
 This package:
-- detects new experiments, adds them to the `profile` file.
+- detects new experiments, adds them to the _profile_ file.
 - provides an interface for reading the profiles and grouping similar experiments for furthur analysis.
 
 # Data structure
