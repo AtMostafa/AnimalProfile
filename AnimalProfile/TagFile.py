@@ -2,6 +2,7 @@ import os
 import logging
 import pandas as pd
 import fnmatch
+import datetime
 from .Profile import Profile
 
 
@@ -26,7 +27,7 @@ class TagFile:
                 fileSize = os.fstat(f.fileno()).st_size
                 if maxLineLength > fileSize:
                     maxLineLength = fileSize - 1
-                f.seek(-abs(maxLineLength)-1, os.SEEK_END)
+                f.seek(-abs(maxLineLength) - 1, os.SEEK_END)
                 lines = f.readlines()
         except Exception as e:
             logging.warning('couldn\'t open file:' + self.path)
@@ -101,6 +102,10 @@ class TagFile:
         sessionList = sorted(sessionList)
         return sessionList
 
+    def get_session_date(self, session: str):
+        sessionDate = datetime.datetime.strptime(session, f"{self.animal}_%Y_%m_%d_%H_%M")
+        return sessionDate
+
     def _write_tag_header(self, profile: Profile):
         content = f"""#info:\n#name:{self.animal}"""
 
@@ -173,6 +178,7 @@ class TagFile:
             for i, key in enumerate(profileLastSession._tableFields):
                 setattr(profileLastSession, key, lastLine[sessionName + 1:].split('\t')[i])
 
+            lastSessionDate = self.get_session_date(profileLastSession.Sessions[-1])
             idx = sessionList.index(profileLastSession.Sessions[-1])
             if idx + 1 < len(sessionList):
                 sessionList = sessionList[idx + 1:]
