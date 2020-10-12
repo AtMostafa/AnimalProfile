@@ -91,7 +91,7 @@ class TagFile:
         table = table.keep_sessions(goodIndex)
         return table
 
-    def get_sesisonList(self):
+    def get_all_sessions(self):
         """
         returns the list of folders inside Experiments folder,
         They must follow the pattern:
@@ -106,7 +106,7 @@ class TagFile:
         sessionDate = datetime.datetime.strptime(session, f"{self.animal}_%Y_%m_%d_%H_%M")
         return sessionDate
 
-    def _write_tag_header(self, profile: Profile):
+    def _write_header(self, profile: Profile):
         content = f"""#info:\n#name:{self.animal}"""
 
         for key in self.root.header:
@@ -126,7 +126,7 @@ class TagFile:
             return False
         return True
 
-    def _update_tag_header(self, overwrite):
+    def _update_header(self, overwrite):
         if not self._is_profile_valid() or overwrite:
             # Ask user for header fields
             profile = self.root.get_profile()
@@ -134,7 +134,7 @@ class TagFile:
                 h = input(f'{header}: ')
                 setattr(profile, header, h)
 
-            isHeaderWritten = self._write_tag_header(profile)
+            isHeaderWritten = self._write_header(profile)
             if not isHeaderWritten:
                 logging.error('failed to write the tag header')
                 return False
@@ -151,23 +151,23 @@ class TagFile:
             return False
         return True
 
-    def write_profile_file(self, overwrite=False):
+    def write(self, overwrite=False):
         """
-        This method writes (overwrites) the profile for the animal
+        This method writes, overwrites, or appends the profile for the animal
         by reading the sessions in the 'Experiments' folder and
         adding them to the profile.
         """
-
         # compute the valid session list
-        sessionList = self.get_sesisonList()
+        sessionList = self.get_all_sessions()
 
         if len(sessionList) < 1:
             logging.error("no session found for:" + self.animal)
             return False
 
         # check or write the tag header
-        isHeaderReady = self._update_tag_header(overwrite)
+        isHeaderReady = self._update_header(overwrite)
         if isHeaderReady is False:
+            logging.error('error in writting the header')
             return False
 
         # Getting the last written session
