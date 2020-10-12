@@ -27,7 +27,7 @@ Data must be structured in a [particular format](/doc/dataStructure.md).
 
 # Basic usage
 
-Instructions are [here](/doc/instructions.md).
+Instructions are [here](/doc/instructions.ipynb).
 
 # Installation
 
