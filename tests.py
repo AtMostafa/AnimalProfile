@@ -18,7 +18,7 @@ profile2.Type = 'Good'
 tagfile = TagFile.TagFile(root, 'Rat111')
 # s = session.batch_get_session_list(root, ['Rat111', 'Rat112'], profile1)
 # s = session.batch_get_tag_pattern(root,)
-# s = tagfile.read_tag_table()
+# s = tagfile.read_body()
 # s.keep_sessions([2, 3])
 s = tagfile.write_profile_file()
 print(s)

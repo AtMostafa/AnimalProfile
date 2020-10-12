@@ -4,6 +4,7 @@ __all__ = ('batch_get_session_list',
         'batch_get_tag_pattern',
         'get_pattern_animalList')
 
+import datetime
 from .. import Root
 from .. import TagFile
 from .. import Profile
@@ -107,3 +108,28 @@ def get_pattern_animalList(root: Root.Root, tagPattern: str):
         animalList.append(session[:len(root.prefix) + 3])
     animalList = list(set(animalList))
     return sorted(animalList)
+
+
+def get_current_animals(days_passed=4):
+    now=datetime.date.today()
+    thisRoot="/NAS02"
+    all_animals=[os.path.basename(path) for path in sorted(glob.glob(os.path.join(thisRoot,"Rat???")))]
+    if all_animals==[]:
+        logging.warning('NAS02 not mounted!')
+        return []
+    
+    last_modifTimes={}
+    animalList=[]
+    for animal in all_animals:
+        experimentsPath=os.path.join(thisRoot,animal,"Experiments")
+        if not os.path.exists(experimentsPath):
+            continue
+        sessionList=[os.path.basename(expPath) for expPath in glob.glob(os.path.join(thisRoot,animal,"Experiments","Rat???_20??_*"))]
+        if not sessionList:
+            continue
+        sessionList=sorted(sessionList)
+        lastSessionDate= datetime.datetime.strptime(sessionList[-1][7:17],'%Y_%m_%d').date()
+        if (now-lastSessionDate).days<=days_passed:
+            animalList.append(animal)
+    
+    return animalList

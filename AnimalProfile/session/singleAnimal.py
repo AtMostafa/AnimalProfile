@@ -10,8 +10,8 @@ def get_session_profile(root: Root.Root, animal: str, session: str):
     """
 
     tagFile = TagFile.TagFile(root, animal)
-    table = tagFile.read_tag_table()
-    header = tagFile.read_tag_header()
+    table = tagFile.read_body()
+    header = tagFile.read_header()
     try:
         index = table.Sessions.index(session)
     except Exception:
@@ -28,14 +28,14 @@ def get_session_list(tagFile: TagFile.TagFile, profile: Profile.Profile = None):
     meeting all the conditions in 'profile', 
     EX: profile={'Speed':['10','20'],'rewardType':'Progressive,'Tag':'Early-DLS_Lesion','Type':'Good'}
     """
-    table = tagFile.read_tag_table()
+    table = tagFile.read_body()
     if table.Sessions == []:
         return Profile.Profile(root=tagFile.root)
     if profile is None:
         profile = Profile.Profile(root=tagFile.root)
 
     # Reject bad header
-    header = tagFile.read_tag_header()
+    header = tagFile.read_header()
     for key in profile._headerFields:
         if str(header[key]) not in getattr(profile, key) and len(getattr(profile, key)) >= 1:
             return Profile.Profile(root=tagFile.root)

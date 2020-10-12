@@ -38,14 +38,14 @@ class TagFile:
     def _is_profile_valid(self,):
         if not self.path.is_file():
             return False    # tag not available
-        header = self.read_tag_header()
+        header = self.read_header()
         if isinstance(header, bool):
             return False    # tag header not correct
         if header['name'] != self.animal:
             return False     # tag animal name not correct
         return True
     
-    def read_tag_header(self):
+    def read_header(self):
         out = dict()
         try:
             with open(self.path, 'r') as f:
@@ -56,10 +56,10 @@ class TagFile:
                     else:
                         break
         except Exception:
-            return None
+            return False
         return out
 
-    def read_tag_table(self, headerSize=None):
+    def read_body(self, headerSize=None):
         """
         This function return the whole table of sessions
         in a tag file as a dictionary
@@ -85,7 +85,7 @@ class TagFile:
         Usual shell-style Wildcards are accepted
         (defined in the 'fnmatch' module of python standard library).
         """
-        table = self.read_tag_table()
+        table = self.read_body()
         goodSessions = fnmatch.filter(table.Tag, tagPattern)
         goodIndex = [x for x, s in enumerate(table.Tag) if s in goodSessions]
         table = table.keep_sessions(goodIndex)
