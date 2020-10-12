@@ -5,6 +5,7 @@ __all__ = ('batch_get_session_list',
         'get_pattern_animalList')
 
 import datetime
+import logging
 from .. import Root
 from .. import TagFile
 from .. import Profile
@@ -12,8 +13,8 @@ from .singleAnimal import *
 
 
 def batch_get_session_list(root: Root.Root,
-                        animalList: list = None,
-                        profile: Profile.Profile = None):
+                           animalList: list = None,
+                           profile: Profile.Profile = None):
     """
     This function returns list of sessions with certain 'profile' for all the animals
     in animalList. if animalList=Nonr, it will search all the animals.
@@ -110,26 +111,22 @@ def get_pattern_animalList(root: Root.Root, tagPattern: str):
     return sorted(animalList)
 
 
-def get_current_animals(days_passed=4):
-    now=datetime.date.today()
-    thisRoot="/NAS02"
-    all_animals=[os.path.basename(path) for path in sorted(glob.glob(os.path.join(thisRoot,"Rat???")))]
-    if all_animals==[]:
-        logging.warning('NAS02 not mounted!')
+def get_current_animals(root: Root.Root, days_passed=4):
+    now = datetime.date.today()
+    all_animals = root.get_all_animals()
+    if all_animals == []:
+        logging.warning('No animal found!')
         return []
-    
-    last_modifTimes={}
-    animalList=[]
+
+    animalList = []
     for animal in all_animals:
-        experimentsPath=os.path.join(thisRoot,animal,"Experiments")
-        if not os.path.exists(experimentsPath):
-            continue
-        sessionList=[os.path.basename(expPath) for expPath in glob.glob(os.path.join(thisRoot,animal,"Experiments","Rat???_20??_*"))]
+        animalTag = TagFile.TagFile(root, animal)
+        sessionList = animalTag.get_all_sessions()
         if not sessionList:
             continue
-        sessionList=sorted(sessionList)
-        lastSessionDate= datetime.datetime.strptime(sessionList[-1][7:17],'%Y_%m_%d').date()
-        if (now-lastSessionDate).days<=days_passed:
+
+        lastSessionDate = animalTag.get_session_date(sessionList[-1])
+        if (now - lastSessionDate).days <= days_passed:
             animalList.append(animal)
-    
+
     return animalList
