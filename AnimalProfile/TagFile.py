@@ -35,7 +35,7 @@ class TagFile:
             return False
         return lines[-1].decode()
 
-    def _is_tag_valid(self,):
+    def _is_profile_valid(self,):
         if not self.path.is_file():
             return False    # tag not available
         header = self.read_tag_header()
@@ -127,7 +127,7 @@ class TagFile:
         return True
 
     def _update_tag_header(self, overwrite):
-        if not self._is_tag_valid() or overwrite:
+        if not self._is_profile_valid() or overwrite:
             # Ask user for header fields
             profile = self.root.get_profile()
             for header in profile._headerFields:
