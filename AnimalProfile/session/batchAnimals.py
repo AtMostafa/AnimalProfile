@@ -10,36 +10,37 @@ import logging
 from .. import Root
 from .. import File
 from .. import Profile
+from ..Profile import EventProfile
 from .singleAnimal import *
 
 
-def batch_get_session_list(root: Root.Root,
+def batch_get_session_list(root: Root,
                            animalList: list = None,
-                           profile: Profile.Profile = None):
+                           profile: Profile = None):
     """
     This function returns list of sessions with certain 'profile' for all the animals
     in animalList. if animalList=Nonr, it will search all the animals.
     """
     if profile is None:
-        profile = Profile.Profile(root=root)
+        profile = Profile(root=root)
 
     if animalList is None or animalList == '' or animalList == []:
         animalList = root.get_all_animals()
 
-    profileOut = Profile.Profile(root=root)
+    profileOut = Profile(root=root)
     for animal in animalList:
-        tagFile = File.File(root, animal)
+        tagFile = File(root, animal)
         sessionProfile = get_session_list(tagFile, profile)
         profileOut += sessionProfile
     return profileOut
 
 
-def batch_get_animal_list(root: Root.Root, profile: Profile.Profile = None):
+def batch_get_animal_list(root: Root, profile: Profile = None):
     """
     this function returns list of animals with at least one session matching the "profile"
     """
     if profile is None:
-        profile = Profile.Profile(root=root)
+        profile = Profile(root=root)
 
     allProfiles = batch_get_session_list(root, animalList=None, profile=profile)
     sessionList = allProfiles.Sessions
@@ -51,9 +52,9 @@ def batch_get_animal_list(root: Root.Root, profile: Profile.Profile = None):
     return sorted(animalList)
 
 
-def batch_get_event(root: Root.Root,
-                    profile1: Profile.Profile,
-                    profile2: Profile.Profile,
+def batch_get_event(root: Root,
+                    profile1: Profile,
+                    profile2: Profile,
                     badAnimals: list = None):
     """
     This function finds the animals that match both profile1 and profile2 IN SUCCESSION
@@ -67,7 +68,7 @@ def batch_get_event(root: Root.Root,
     animalList0 = [animal for animal in animalList0 if animal not in badAnimals]  # remove bad animals from animalList0
     animalList0.sort()
 
-    eventProfile = Profile.EventProfile(profile1, profile2)
+    eventProfile = EventProfile(profile1, profile2)
     for animal in animalList0:
         sessionProfile1 = batch_get_session_list(root, animalList=[animal], profile=profile1)
         sessionProfile2 = batch_get_session_list(root, animalList=[animal], profile=profile2)
@@ -82,7 +83,7 @@ def batch_get_event(root: Root.Root,
     return eventProfile
 
 
-def batch_get_tag_pattern(root: Root.Root,
+def batch_get_tag_pattern(root: Root,
                           animalList: list = None,
                           tagPattern: str = '*'):
     """
@@ -93,12 +94,12 @@ def batch_get_tag_pattern(root: Root.Root,
 
     profileDict = root.get_profile()
     for animal in animalList:
-        tagFile = File.File(root, animal)
+        tagFile = File(root, animal)
         profileDict += tagFile.get_pattern_session_list(tagPattern=tagPattern)
     return profileDict
 
 
-def get_pattern_animalList(root: Root.Root, tagPattern: str):
+def get_pattern_animalList(root: Root, tagPattern: str):
     """
     this function returns list of animals with at least one session matching the 'tagPattern'
     """
@@ -112,7 +113,7 @@ def get_pattern_animalList(root: Root.Root, tagPattern: str):
     return sorted(animalList)
 
 
-def get_current_animals(root: Root.Root, days_passed=4):
+def get_current_animals(root: Root, days_passed=4):
     now = datetime.datetime.now()
     all_animals = root.get_all_animals()
     if all_animals == []:
@@ -121,7 +122,7 @@ def get_current_animals(root: Root.Root, days_passed=4):
 
     animalList = []
     for animal in all_animals:
-        animalTag = File.File(root, animal)
+        animalTag = File(root, animal)
         sessionList = animalTag.get_all_sessions()
         if not sessionList:
             continue

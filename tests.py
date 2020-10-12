@@ -1,12 +1,11 @@
-import os, sys
+import os
+import sys
 from pathlib import Path
-from AnimalProfile.Root import Root
+import AnimalProfile
 import AnimalProfile.session as session
-import AnimalProfile.File as File
-import AnimalProfile.Profile as Profile
 
 
-root = Root()
+root = AnimalProfile.Root()
 profile1 = root.get_profile()
 profile1.Speed = '10'
 profile1.Type = 'Good'
@@ -15,12 +14,12 @@ profile2.Speed = '15'
 profile2.Type = 'Good'
 # profile.Event = 'SpeedChange'
 # profile.rewardType = 'Progressive'
-# tagfile = File.File(root, 'Rat111')
+# tagfile = AnimalProfile.File(root, 'Rat111')
 # s = session.batch_get_session_list(root, ['Rat111', 'Rat112'], profile1)
 # s = session.batch_get_tag_pattern(root,)
-s = session.batch_get_event(root, profile1, profile2)
+# s = session.batch_get_event(root, profile1, profile2)
 # s = tagfile.read_body()
 # s.keep_sessions([2, 3])
 # s = tagfile.write()
-s = session.get_current_animals(root, 20000)
+# s = session.get_current_animals(root, 20000)
 print(s)

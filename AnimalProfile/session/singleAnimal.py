@@ -4,25 +4,25 @@ from .. import File
 from .. import Profile
 
 
-def get_session_profile(root: Root.Root, animal: str, session: str):
+def get_session_profile(root: Root, animal: str, session: str):
     """
     get the profile of a single session
     """
 
-    tagFile = File.File(root, animal)
+    tagFile = File(root, animal)
     table = tagFile.read_body()
     header = tagFile.read_header()
     try:
         index = table.Sessions.index(session)
     except Exception:
-        return Profile.Profile(root=root)
+        return Profile(root=root)
     profile = {key: getattr(table, key)[index] for key in table._tableFields}
     profile.update({key: header[key] for key in table._headerFields})
 
-    return Profile.Profile(root=root).from_dict(profile)
+    return Profile(root=root).from_dict(profile)
 
 
-def get_session_list(tagFile: File.File, profile: Profile.Profile = None):
+def get_session_list(tagFile: File, profile: Profile = None):
     """
     This function returns the list of the sessions within a profile file
     meeting all the conditions in 'profile', 
@@ -30,15 +30,15 @@ def get_session_list(tagFile: File.File, profile: Profile.Profile = None):
     """
     table = tagFile.read_body()
     if table.Sessions == []:
-        return Profile.Profile(root=tagFile.root)
+        return Profile(root=tagFile.root)
     if profile is None:
-        profile = Profile.Profile(root=tagFile.root)
+        profile = Profile(root=tagFile.root)
 
     # Reject bad header
     header = tagFile.read_header()
     for key in profile._headerFields:
         if str(header[key]) not in getattr(profile, key) and len(getattr(profile, key)) >= 1:
-            return Profile.Profile(root=tagFile.root)
+            return Profile(root=tagFile.root)
 
     goodSessions = []
     for index, session in enumerate(sorted(table.Sessions)):
@@ -57,4 +57,4 @@ def get_session_list(tagFile: File.File, profile: Profile.Profile = None):
     goodIndex = [x for x, s in enumerate(table.Sessions) if s in goodSessions]
     goodSessionsProfile = {key: [str(getattr(table, key)[idx]) for idx in goodIndex] for key in table._tableFields}
     goodSessionsProfile.update({key: header[key] for key in table._headerFields})
-    return Profile.Profile(root=tagFile.root).from_dict(goodSessionsProfile)
+    return Profile(root=tagFile.root).from_dict(goodSessionsProfile)
