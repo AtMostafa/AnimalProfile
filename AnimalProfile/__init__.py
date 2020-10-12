@@ -3,5 +3,4 @@ from .File import File
 from .Profile import Profile
 from .Root import Root
 
-
-logging.getLogger().setLevel(logging.INFO)
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
