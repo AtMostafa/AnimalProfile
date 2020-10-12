@@ -32,6 +32,7 @@ That is, the animal name, followed by the date and time of the experiment.
 For example, __Rat123_2020_01_02_14_28__ contains the data acquired from __Rat123__ on January 2nd, 2020, at 14:28.
 
 Overall, the data structure looks like this:
+(_AnimalProfile_ creates the `AnimalProfile.setup` and `*.profile` files.)
 ```
 root directory is called 'data'
 
