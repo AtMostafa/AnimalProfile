@@ -7,7 +7,7 @@ __all__ = ('batch_get_session_list',
 import datetime
 import logging
 from .. import Root
-from .. import TagFile
+from .. import File
 from .. import Profile
 from .singleAnimal import *
 
@@ -27,7 +27,7 @@ def batch_get_session_list(root: Root.Root,
 
     profileOut = Profile.Profile(root=root)
     for animal in animalList:
-        tagFile = TagFile.TagFile(root, animal)
+        tagFile = File.File(root, animal)
         sessionProfile = get_session_list(tagFile, profile)
         profileOut += sessionProfile
     return profileOut
@@ -92,7 +92,7 @@ def batch_get_tag_pattern(root: Root.Root,
 
     profileDict = root.get_profile()
     for animal in animalList:
-        tagFile = TagFile.TagFile(root, animal)
+        tagFile = File.File(root, animal)
         profileDict += tagFile.get_pattern_session_list(tagPattern=tagPattern)
     return profileDict
 
@@ -120,7 +120,7 @@ def get_current_animals(root: Root.Root, days_passed=4):
 
     animalList = []
     for animal in all_animals:
-        animalTag = TagFile.TagFile(root, animal)
+        animalTag = File.File(root, animal)
         sessionList = animalTag.get_all_sessions()
         if not sessionList:
             continue

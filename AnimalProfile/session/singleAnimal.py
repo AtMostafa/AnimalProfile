@@ -1,6 +1,6 @@
 __all__ = ('get_session_profile','get_session_list',)
 from .. import Root
-from .. import TagFile
+from .. import File
 from .. import Profile
 
 
@@ -9,7 +9,7 @@ def get_session_profile(root: Root.Root, animal: str, session: str):
     get the profile of a single session
     """
 
-    tagFile = TagFile.TagFile(root, animal)
+    tagFile = File.File(root, animal)
     table = tagFile.read_body()
     header = tagFile.read_header()
     try:
@@ -22,7 +22,7 @@ def get_session_profile(root: Root.Root, animal: str, session: str):
     return Profile.Profile(root=root).from_dict(profile)
 
 
-def get_session_list(tagFile: TagFile.TagFile, profile: Profile.Profile = None):
+def get_session_list(tagFile: File.File, profile: Profile.Profile = None):
     """
     This function returns the list of the sessions within a profile file
     meeting all the conditions in 'profile', 
