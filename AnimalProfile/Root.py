@@ -32,6 +32,9 @@ class Root:
     def __str__(self):
         return f'AnimalProfile profile at: {self.settingPath}'
 
+    def __repr__(self):
+        return self.__str__()
+
     def _read_root(self):
         self.settingPath = self.root / self.SETTING_FILE
         if not self.settingPath.is_file():
