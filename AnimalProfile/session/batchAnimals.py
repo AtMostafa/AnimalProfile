@@ -1,4 +1,4 @@
-__all__ = ('batch_get_session_list',
+__all__ = ('get_session_list',
            'batch_get_animal_list',
            'batch_get_event',
            'batch_get_tag_pattern',
@@ -14,7 +14,7 @@ from ..Profile import EventProfile
 from .singleAnimal import *
 
 
-def batch_get_session_list(root: Root,
+def get_session_list(root: Root,
                            animalList: list = None,
                            profile: Profile = None):
     """
@@ -42,7 +42,7 @@ def batch_get_animal_list(root: Root, profile: Profile = None):
     if profile is None:
         profile = Profile(root=root)
 
-    allProfiles = batch_get_session_list(root, animalList=None, profile=profile)
+    allProfiles = get_session_list(root, animalList=None, profile=profile)
     sessionList = allProfiles.Sessions
 
     animalList = []
@@ -70,9 +70,9 @@ def batch_get_event(root: Root,
 
     eventProfile = EventProfile(profile1, profile2)
     for animal in animalList0:
-        sessionProfile1 = batch_get_session_list(root, animalList=[animal], profile=profile1)
-        sessionProfile2 = batch_get_session_list(root, animalList=[animal], profile=profile2)
-        sessionTotal = batch_get_session_list(root, animalList=[animal], profile=root.get_profile())
+        sessionProfile1 = get_session_list(root, animalList=[animal], profile=profile1)
+        sessionProfile2 = get_session_list(root, animalList=[animal], profile=profile2)
+        sessionTotal = get_session_list(root, animalList=[animal], profile=root.get_profile())
         try:
             index = sessionTotal.Sessions.index(sessionProfile1.Sessions[-1])
             if sessionProfile2.Sessions[0] == sessionTotal.Sessions[index + 1]:
