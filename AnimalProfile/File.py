@@ -11,7 +11,7 @@ class File:
     This class represents a tag file and functions to deal with it
     """
 
-    def __init__(self, root, animal: str,):
+    def __init__(self, root: 'Root', animal: str,):
         self.root = root
         self.animal = animal
         self.path = self.root.root / animal / animal
