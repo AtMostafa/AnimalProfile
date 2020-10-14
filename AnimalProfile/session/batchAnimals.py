@@ -113,7 +113,11 @@ def get_pattern_animalList(root: Root, tagPattern: str):
     return sorted(animalList)
 
 
-def get_current_animals(root: Root, days_passed=4):
+def get_current_animals(root: Root, days_passed: int = 4):
+    """
+    this function returns the list of animals with a new session
+    within the last few ('days_passed') days
+    """
     now = datetime.datetime.now()
     all_animals = root.get_all_animals()
     if all_animals == []:
