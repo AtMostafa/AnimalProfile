@@ -78,34 +78,6 @@ class File:
         out = {label: list(column) for label, column in zip(table.columns.values, table.values.T)}
         return Profile(root=self.root).from_dict(out)
 
-    def get_pattern_session_list(self, tagPattern='*'):
-        """
-        This function returns the list of the sessions with the 'Tag'
-        field conforming to the pattern in 'tagPattern'.
-        Usual shell-style Wildcards are accepted
-        (defined in the 'fnmatch' module of python standard library).
-        """
-        table = self.read_body()
-        goodSessions = fnmatch.filter(table.Tag, tagPattern)
-        goodIndex = [x for x, s in enumerate(table.Tag) if s in goodSessions]
-        table = table.keep_sessions(goodIndex)
-        return table
-
-    def get_all_sessions(self):
-        """
-        returns the list of folders inside Experiments folder,
-        They must follow the pattern:
-        <prefix><XXX>_YYYY_MM_DD_HH_MM
-        """
-        expPath = self.path.parent / 'Experiments'
-        sessionList = [path.name for path in expPath.glob(f'{self.animal}_20??_??_??_??_??')]
-        sessionList = sorted(sessionList)
-        return sessionList
-
-    def get_session_date(self, session: str):
-        sessionDate = datetime.datetime.strptime(session, f"{self.animal}_%Y_%m_%d_%H_%M")
-        return sessionDate
-
     def _write_header(self, profile: Profile):
         content = f"""#info:\n#name:{self.animal}"""
 
@@ -201,6 +173,34 @@ class File:
             return False
         logging.info("profile file is written for: " + self.animal)
         return True
+
+    def get_pattern_session_list(self, tagPattern='*'):
+        """
+        This function returns the list of the sessions with the 'Tag'
+        field conforming to the pattern in 'tagPattern'.
+        Usual shell-style Wildcards are accepted
+        (defined in the 'fnmatch' module of python standard library).
+        """
+        table = self.read_body()
+        goodSessions = fnmatch.filter(table.Tag, tagPattern)
+        goodIndex = [x for x, s in enumerate(table.Tag) if s in goodSessions]
+        table = table.keep_sessions(goodIndex)
+        return table
+
+    def get_all_sessions(self):
+        """
+        returns the list of folders inside Experiments folder,
+        They must follow the pattern:
+        <prefix><XXX>_YYYY_MM_DD_HH_MM
+        """
+        expPath = self.path.parent / 'Experiments'
+        sessionList = [path.name for path in expPath.glob(f'{self.animal}_20??_??_??_??_??')]
+        sessionList = sorted(sessionList)
+        return sessionList
+
+    def get_session_date(self, session: str):
+        sessionDate = datetime.datetime.strptime(session, f"{self.animal}_%Y_%m_%d_%H_%M")
+        return sessionDate
 
 
 if __name__ == "__main__":
