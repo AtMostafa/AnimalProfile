@@ -21,9 +21,9 @@ class Profile:
         self.FREEZE = True
 
     def __str__(self):
-        str1 = '\n'.join([f'{field}={getattr(self,field)}' for field in self._headerFields])
-        str2 = '\n'.join([f'{field}={getattr(self,field)}' for field in self._tableFields])
-        return f'\nHeader: {str1};\n\nBody: {str2}'
+        str1 = '\t'.join([f'{field}={getattr(self,field)}' for field in self._headerFields])
+        str2 = '\t'.join([f'{field}={getattr(self,field)}' for field in self._tableFields])
+        return f'\nHeader:\n{str1};\n\nBody:]n{str2}'
 
     def __repr__(self):
         return self.__str__()
