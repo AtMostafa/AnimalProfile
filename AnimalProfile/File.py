@@ -198,23 +198,22 @@ class File:
         sessionList = sorted(sessionList)
         return sessionList
 
-    def get_sessionList(tagFile: File, profile: Profile = None):
+    def get_profile_session_list(self, profile: Profile = None):
         """
         This function returns the list of the sessions within a profile file
         meeting all the conditions in 'profile', 
-        EX: profile={'Speed':['10','20'],'rewardType':'Progressive,'Tag':'Early-DLS_Lesion','Type':'Good'}
         """
-        table = tagFile.read_body()
+        table = self.read_body()
         if table.Sessions == []:
-            return Profile(root=tagFile.root)
+            return Profile(root=self.root)
         if profile is None:
-            profile = Profile(root=tagFile.root)
+            profile = Profile(root=self.root)
 
         # Reject bad header
-        header = tagFile.read_header()
+        header = self.read_header()
         for key in profile._headerFields:
             if str(header[key]) not in getattr(profile, key) and len(getattr(profile, key)) >= 1:
-                return Profile(root=tagFile.root)
+                return Profile(root=self.root)
 
         goodSessions = []
         for index, session in enumerate(sorted(table.Sessions)):
@@ -233,7 +232,8 @@ class File:
         goodIndex = [x for x, s in enumerate(table.Sessions) if s in goodSessions]
         goodSessionsProfile = {key: [str(getattr(table, key)[idx]) for idx in goodIndex] for key in table._tableFields}
         goodSessionsProfile.update({key: header[key] for key in table._headerFields})
-        return Profile(root=tagFile.root).from_dict(goodSessionsProfile)
+
+        return Profile(root=self.root).from_dict(goodSessionsProfile)
 
     def get_session_date(self, session: str):
         sessionDate = datetime.datetime.strptime(session, f"{self.animal}_%Y_%m_%d_%H_%M")

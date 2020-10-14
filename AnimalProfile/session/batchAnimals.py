@@ -30,7 +30,7 @@ def batch_get_session_list(root: Root,
     profileOut = Profile(root=root)
     for animal in animalList:
         tagFile = File(root, animal)
-        sessionProfile = get_session_list(tagFile, profile)
+        sessionProfile = tagFile.get_profile_session_list(profile)
         profileOut += sessionProfile
     return profileOut
 

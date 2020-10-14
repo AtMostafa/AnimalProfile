@@ -1,4 +1,4 @@
-__all__ = ('get_session_profile','get_session_list',)
+__all__ = ('get_session_profile',)
 from .. import Root
 from .. import File
 from .. import Profile
