@@ -15,8 +15,8 @@ from .singleAnimal import *
 
 
 def get_session_list(root: Root,
-                           animalList: list = None,
-                           profile: Profile = None):
+                     animalList: list = None,
+                     profile: Profile = None):
     """
     This function returns list of sessions with certain 'profile' for all the animals
     in animalList. if animalList=Nonr, it will search all the animals.
