@@ -1,5 +1,5 @@
 __all__ = ('get_session_list',
-           'batch_get_animal_list',
+           'get_animal_list',
            'batch_get_event',
            'batch_get_tag_pattern',
            'get_pattern_animalList',
@@ -35,7 +35,7 @@ def get_session_list(root: Root,
     return profileOut
 
 
-def batch_get_animal_list(root: Root, profile: Profile = None):
+def get_animal_list(root: Root, profile: Profile = None):
     """
     this function returns list of animals with at least one session matching the "profile"
     """
@@ -62,8 +62,8 @@ def batch_get_event(root: Root,
     """
     if badAnimals is None:
         badAnimals = []
-    animalList1 = batch_get_animal_list(root, profile1)
-    animalList2 = batch_get_animal_list(root, profile2)
+    animalList1 = get_animal_list(root, profile1)
+    animalList2 = get_animal_list(root, profile2)
     animalList0 = set(animalList1).intersection(set(animalList2))
     animalList0 = [animal for animal in animalList0 if animal not in badAnimals]  # remove bad animals from animalList0
     animalList0.sort()
