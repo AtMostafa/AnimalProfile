@@ -32,9 +32,13 @@ class Profile:
         if not self.FREEZE:
             super().__setattr__(name, value)
         elif name in self._headerFields or name in self._tableFields:
-            assert isinstance(value, (str, list, tuple, type(None))), f"values must be string/list/tuple, not {type(value)}"
-            if isinstance(value, (str, type(None))):
-                value = [value]
+            if isinstance(value, (str, int, float)):
+                value = [str(value)]
+            elif hasattr(value, '__iter__'):
+                for val in value:
+                    assert isinstance(val, str), \
+                        f"values must be a string, not {type(val)}"
+
             super().__setattr__(name, list(value))
         else:
             logging.error(f'Field "{name}" does not exist in profiles')
@@ -43,16 +47,11 @@ class Profile:
         assert isinstance(other, type(self)), f'only {type(self)}s can be added.'
         out = Profile(root=self._root)
         for key in self.keys():
-            if getattr(self, key) is [None]:
-                setattr(out, key, getattr(other, key))
-            elif getattr(other, key) is [None]:
-                setattr(out, key, getattr(self, key))
-            else:
-                setattr(out, key,
-                        sorted(list(
-                            set(
-                                getattr(self, key) + getattr(other, key)
-                            ))))
+            setattr(out, key,
+                    sorted(list(
+                        set(
+                            getattr(self, key) + getattr(other, key)
+                        ))))
         return out
 
     def _define_fields(self):
