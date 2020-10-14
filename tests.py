@@ -2,7 +2,6 @@ import os
 import sys
 from pathlib import Path
 import AnimalProfile
-import AnimalProfile.session as session
 
 
 root = AnimalProfile.Root()
@@ -15,7 +14,7 @@ profile2.Type = 'Good'
 # profile.Event = 'SpeedChange'
 # profile.rewardType = 'Progressive'
 # tagfile = AnimalProfile.File(root, 'Rat112')
-s = session.get_session_list(root, ['Rat111', 'Rat112'], profile1)
+s = AnimalProfile.get_session_list(root, ['Rat111', 'Rat112'], profile1)
 # s = session.get_tag_pattern(root,)
 # s = session.get_event(root, profile1, profile2)
 # s = tagfile.read_body()
