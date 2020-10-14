@@ -1,7 +1,7 @@
 __all__ = ('get_session_list',
            'get_animal_list',
            'get_event',
-           'batch_get_tag_pattern',
+           'get_tag_pattern',
            'get_pattern_animalList',
            'get_current_animals')
 
@@ -83,9 +83,9 @@ def get_event(root: Root,
     return eventProfile
 
 
-def batch_get_tag_pattern(root: Root,
-                          animalList: list = None,
-                          tagPattern: str = '*'):
+def get_tag_pattern(root: Root,
+                    animalList: list = None,
+                    tagPattern: str = '*'):
     """
     applies 'get_pattern_session_list' to a list of animals
     """
@@ -103,7 +103,7 @@ def get_pattern_animalList(root: Root, tagPattern: str):
     """
     this function returns list of animals with at least one session matching the 'tagPattern'
     """
-    allProfile = batch_get_tag_pattern(root, animalList=None, tagPattern=tagPattern)
+    allProfile = get_tag_pattern(root, animalList=None, tagPattern=tagPattern)
     sessionList = allProfile.Sessions
 
     animalList = []
