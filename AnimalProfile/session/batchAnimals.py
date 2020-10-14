@@ -1,6 +1,6 @@
 __all__ = ('get_session_list',
            'get_animal_list',
-           'batch_get_event',
+           'get_event',
            'batch_get_tag_pattern',
            'get_pattern_animalList',
            'get_current_animals')
@@ -52,7 +52,7 @@ def get_animal_list(root: Root, profile: Profile = None):
     return sorted(animalList)
 
 
-def batch_get_event(root: Root,
+def get_event(root: Root,
                     profile1: Profile,
                     profile2: Profile,
                     badAnimals: list = None):

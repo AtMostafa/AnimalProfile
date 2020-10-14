@@ -17,7 +17,7 @@ profile2.Type = 'Good'
 # tagfile = AnimalProfile.File(root, 'Rat112')
 s = session.get_session_list(root, ['Rat111', 'Rat112'], profile1)
 # s = session.batch_get_tag_pattern(root,)
-# s = session.batch_get_event(root, profile1, profile2)
+# s = session.get_event(root, profile1, profile2)
 # s = tagfile.read_body()
 # s.keep_sessions([2, 3])
 # s = tagfile.write()

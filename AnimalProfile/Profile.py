@@ -92,7 +92,7 @@ class Profile:
 
 class EventProfile:
     """
-    holds the results of the 'batch_get_event' function
+    holds the results of the 'get_event' function
     """
     def __init__(self, profile1: Profile, profile2: Profile):
         self.profile1 = profile1
