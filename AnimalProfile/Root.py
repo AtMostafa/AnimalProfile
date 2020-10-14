@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 import logging
 from .Profile import Profile
+from .File import File
 
 
 class Root:
@@ -83,6 +84,19 @@ class Root:
         animalPaths = sorted(self.root.glob(f'{self.prefix}???/'))
         animalList = [animal.name for animal in animalPaths]
         return sorted(animalList)
+
+    def update(self, animal: str):
+        """
+        updates the profile file of the animal using File.write()
+        """
+        tagFile = File(self, animal)
+        isWritten = tagFile.write()
+        if isWritten:
+            logging.info(f'Profile file updated for {animal}')
+        else:
+            logging.info(f'{animal} profile did not update.')
+
+        return isWritten
 
 
 if __name__ == "__main__":
