@@ -53,9 +53,9 @@ def get_animal_list(root: Root, profile: Profile = None):
 
 
 def get_event(root: Root,
-                    profile1: Profile,
-                    profile2: Profile,
-                    badAnimals: list = None):
+              profile1: Profile,
+              profile2: Profile,
+              badAnimals: list = None):
     """
     This function finds the animals that match both profile1 and profile2 IN SUCCESSION
     I.E., when the conditions changed
