@@ -31,4 +31,13 @@ Instructions are [here](/doc/instructions.ipynb).
 
 # Installation
 
+```
+pip install AnimalProfile
+```
+
 ## Requirements
+
+```
+python > 3.6
+pandas
+```
